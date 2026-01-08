@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cvxpy-summary"
+version = "0.1.0"
+description = "Tiny utilities to summarize CVXPY problems (variables, constraints, DCP/DQCP/DPP, solver stats)."
+readme = "readme.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Wangkun"}]
+dependencies = ["cvxpy>=1.4"]
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cvxpy_summary*"]
