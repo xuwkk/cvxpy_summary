@@ -34,6 +34,7 @@ class CvxpyProblemSummary:
     n_scalar_integer: int
     
     # Constraint breakdown (if available)
+    n_scalar_constr: Optional[int] = None
     n_scalar_eq_constr: Optional[int] = None
     n_scalar_leq_constr: Optional[int] = None
     
@@ -158,12 +159,21 @@ def summarize_cvxpy_problem(
     has_params = len(params_) > 0
     
     # size_metrics (built-in) gives scalar constraint breakdown when available
+    n_scalar_constr = None
     n_scalar_eq_constr = None
     n_scalar_leq_constr = None
     try:
         sm = prob.size_metrics
         n_scalar_eq_constr = int(getattr(sm, "num_scalar_eq_constr", None)) if hasattr(sm, "num_scalar_eq_constr") else None
         n_scalar_leq_constr = int(getattr(sm, "num_scalar_leq_constr", None)) if hasattr(sm, "num_scalar_leq_constr") else None
+        if n_scalar_eq_constr is not None and n_scalar_leq_constr is not None:
+            n_scalar_constr = n_scalar_eq_constr + n_scalar_leq_constr
+        elif n_scalar_eq_constr is not None:
+            n_scalar_constr = n_scalar_eq_constr
+        elif n_scalar_leq_constr is not None:
+            n_scalar_constr = n_scalar_leq_constr
+        else:
+            n_scalar_constr = None
     except Exception:
         pass
     
@@ -210,7 +220,8 @@ def summarize_cvxpy_problem(
         n_scalar_boolean=n_scalar_bool,
         n_integer_vars=n_int,
         n_scalar_integer=n_scalar_int,
-
+        
+        n_scalar_constr=n_scalar_constr,
         n_scalar_eq_constr=n_scalar_eq_constr,
         n_scalar_leq_constr=n_scalar_leq_constr,
 
@@ -249,6 +260,8 @@ def print_summary(
     print("")
 
     print(f"  constraints (objects): {s['n_constraints']}")
+    if s.get("n_scalar_constr") is not None:
+        print(f"  constraints (scalar): {s.get('n_scalar_constr')}")
     if s.get("n_scalar_eq_constr") is not None or s.get("n_scalar_leq_constr") is not None:
         print(f"  constraints (scalar eq/leq): {s.get('n_scalar_eq_constr')}/{s.get('n_scalar_leq_constr')}")
     print("")
