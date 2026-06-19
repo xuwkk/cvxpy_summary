@@ -10,14 +10,19 @@ An example output is shown below when I am solving a [unit commitment](https://e
 
 ## Install
 
-Editable from GitHub:
+From PyPI:
+```bash
+pip install cvxpy-summary
+```
+
+Editable from a local checkout:
 ```bash
 pip install -e .
 ```
 
-Or pin to a commit/tag:
+Or pin to a GitHub tag/commit:
 ```bash
-pip install "git+https://github.com/xuwkk/cvxpy_summary.git@v0.1.0"
+pip install "git+https://github.com/xuwkk/cvxpy_summary.git@v0.1.2"
 # or @<commit-sha>
 ```
 
